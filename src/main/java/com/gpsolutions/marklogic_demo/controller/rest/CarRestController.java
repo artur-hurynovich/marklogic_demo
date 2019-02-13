@@ -1,4 +1,4 @@
-package com.gpsolutions.marklogic_demo.controller;
+package com.gpsolutions.marklogic_demo.controller.rest;
 
 import com.gpsolutions.marklogic_demo.dto.impl.CarDTO;
 import com.gpsolutions.marklogic_demo.service.GenericService;
@@ -15,11 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/car")
-public class CarController {
+public class CarRestController {
     private final GenericService<CarDTO> carService;
 
     @Autowired
-    public CarController(final GenericService<CarDTO> carService) {
+    public CarRestController(final GenericService<CarDTO> carService) {
         this.carService = carService;
     }
 
