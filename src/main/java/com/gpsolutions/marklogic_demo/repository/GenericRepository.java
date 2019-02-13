@@ -7,5 +7,7 @@ import java.util.List;
 public interface GenericRepository<E extends AbstractEntity> {
     void create(final E e);
 
+    E read(final String id);
+
     List<E> readAll();
 }

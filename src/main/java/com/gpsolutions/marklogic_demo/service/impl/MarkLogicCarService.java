@@ -12,24 +12,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MarkLogicCarEntityService implements GenericService<CarDTO> {
-    private final GenericRepository<CarEntity> carEntityRepository;
+public class MarkLogicCarService implements GenericService<CarDTO> {
+    private final GenericRepository<CarEntity> carRepository;
     private final EntityDTOConverter<CarEntity, CarDTO> carConverter;
 
     @Autowired
-    public MarkLogicCarEntityService(final GenericRepository<CarEntity> carEntityRepository,
-                                     final EntityDTOConverter<CarEntity, CarDTO> carConverter) {
-        this.carEntityRepository = carEntityRepository;
+    public MarkLogicCarService(final GenericRepository<CarEntity> carRepository,
+                               final EntityDTOConverter<CarEntity, CarDTO> carConverter) {
+        this.carRepository = carRepository;
         this.carConverter = carConverter;
     }
 
     @Override
     public void create(final CarDTO carDTO) {
-        carEntityRepository.create(carConverter.convertToEntity(carDTO));
+        carRepository.create(carConverter.convertToEntity(carDTO));
+    }
+
+    @Override
+    public CarDTO read(final String id) {
+        return carConverter.convertToDTO(carRepository.read(id));
     }
 
     @Override
     public List<CarDTO> readAll() {
-        return carEntityRepository.readAll().stream().map(carConverter::convertToDTO).collect(Collectors.toList());
+        return carRepository.readAll().stream().map(carConverter::convertToDTO).collect(Collectors.toList());
     }
 }

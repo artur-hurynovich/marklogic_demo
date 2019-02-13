@@ -12,23 +12,28 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Repository
-public class MarklogicPojoCarEntityRepository implements GenericRepository<CarEntity> {
+public class MarkLogicPojoCarRepository implements GenericRepository<CarEntity> {
     private final DatabaseClient databaseClient;
-    private final PojoRepository<CarEntity, String> repository;
+    private final PojoRepository<CarEntity, String> pojoRepository;
 
-    public MarklogicPojoCarEntityRepository(final DatabaseClient databaseClient) {
+    public MarkLogicPojoCarRepository(final DatabaseClient databaseClient) {
         this.databaseClient = databaseClient;
-        this.repository = databaseClient.newPojoRepository(CarEntity.class, String.class);
+        this.pojoRepository = databaseClient.newPojoRepository(CarEntity.class, String.class);
     }
 
     @Override
     public void create(final CarEntity carEntity) {
-        repository.write(carEntity);
+        pojoRepository.write(carEntity);
+    }
+
+    @Override
+    public CarEntity read(final String id) {
+        return pojoRepository.read(id);
     }
 
     @Override
     public List<CarEntity> readAll() {
-        return StreamSupport.stream(repository.readAll(1).spliterator(), false).
+        return StreamSupport.stream(pojoRepository.readAll(0).spliterator(), false).
                 collect(Collectors.toList());
     }
 
