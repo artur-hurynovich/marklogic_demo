@@ -1,4 +1,4 @@
-package com.gpsolutions.marklogic_demo.entity.car;
+package com.gpsolutions.marklogic_demo.entity.impl;
 
 import com.gpsolutions.marklogic_demo.entity.AbstractEntity;
 import com.gpsolutions.marklogic_demo.enumeration.EngineType;
