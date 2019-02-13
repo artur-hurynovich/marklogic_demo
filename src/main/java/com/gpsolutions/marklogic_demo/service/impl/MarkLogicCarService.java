@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +26,7 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
 
     @Override
     public void create(final CarDTO carDTO) {
+        carDTO.setId(UUID.randomUUID().toString());
         carRepository.create(carConverter.convertToEntity(carDTO));
     }
 
@@ -36,5 +38,15 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
     @Override
     public List<CarDTO> readAll() {
         return carRepository.readAll().stream().map(carConverter::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(final CarDTO carDTO) {
+        carRepository.update(carConverter.convertToEntity(carDTO));
+    }
+
+    @Override
+    public void delete(final String id) {
+        carRepository.delete(id);
     }
 }

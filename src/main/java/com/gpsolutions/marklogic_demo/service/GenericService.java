@@ -10,4 +10,8 @@ public interface GenericService<E extends AbstractDTO> {
     E read(final String id);
 
     List<E> readAll();
+
+    void update(final E e);
+
+    void delete(final String id);
 }

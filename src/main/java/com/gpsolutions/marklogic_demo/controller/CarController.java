@@ -3,6 +3,7 @@ package com.gpsolutions.marklogic_demo.controller;
 import com.gpsolutions.marklogic_demo.dto.impl.CarDTO;
 import com.gpsolutions.marklogic_demo.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,27 +14,37 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/car")
+@RequestMapping("/api/car")
 public class CarController {
-    private final GenericService<CarDTO> carDTOService;
+    private final GenericService<CarDTO> carService;
 
     @Autowired
-    public CarController(final GenericService<CarDTO> carDTOService) {
-        this.carDTOService = carDTOService;
+    public CarController(final GenericService<CarDTO> carService) {
+        this.carService = carService;
     }
 
     @PostMapping("/create")
     public void createCar(final @RequestBody CarDTO newCarDTO) {
-        carDTOService.create(newCarDTO);
+        carService.create(newCarDTO);
     }
 
-    @GetMapping
+    @GetMapping("/read")
     public CarDTO getCar(final @RequestParam String id) {
-        return carDTOService.read(id);
+        return carService.read(id);
     }
 
     @GetMapping("/readAll")
     public List<CarDTO> getAllCars() {
-        return carDTOService.readAll();
+        return carService.readAll();
+    }
+
+    @PostMapping("/update")
+    public void updateCar(final @RequestBody CarDTO carToUpdate) {
+        carService.update(carToUpdate);
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteCar(final @RequestParam String id){
+        carService.delete(id);
     }
 }

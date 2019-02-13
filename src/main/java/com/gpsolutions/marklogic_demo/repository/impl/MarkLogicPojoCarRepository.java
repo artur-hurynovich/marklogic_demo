@@ -37,6 +37,16 @@ public class MarkLogicPojoCarRepository implements GenericRepository<CarEntity> 
                 collect(Collectors.toList());
     }
 
+    @Override
+    public void update(final CarEntity carEntity) {
+        pojoRepository.write(carEntity);
+    }
+
+    @Override
+    public void delete(final String id) {
+        pojoRepository.delete(id);
+    }
+
     @PreDestroy
     public void release() {
         databaseClient.release();

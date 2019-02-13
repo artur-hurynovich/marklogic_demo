@@ -10,4 +10,8 @@ public interface GenericRepository<E extends AbstractEntity> {
     E read(final String id);
 
     List<E> readAll();
+
+    void update(final E e);
+
+    void delete(final String id);
 }
