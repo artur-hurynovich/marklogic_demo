@@ -3,122 +3,63 @@
 <head>
 	<title>New Car</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" type="text/css" th:href="@{css/cars-style.css}" href="../static/css/cars-style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/assets/css/cars-style.css}" href="../static/assets/css/cars-style.css">
 </head>
 <body>
 	<div th:insert="~{menu :: menuBar}"></div>
-	<form id="newCarForm">
+	<form id="newCarForm" action="#" th:action="@{~/create}" th:object="${newCarDto}" method="post">
 		<table>
 			<tr>
 				<td><label for="markField">Mark:</label></td>
-				<td><input type="text" name="mark" id="markField"><div id="markError">Please, fill the field!</div></td>
+				<td><input type="text" th:field="*{mark}" id="markField" required="required"></td>
 			</tr>
 			<tr>
 				<td><label for="modelField">Model:</label></td>
-				<td><input type="text" name="model" id="modelField"><div id="modelError">Please, fill the field!</div></td>
+				<td><input type="text" th:field="*{model}" id="modelField" required="required"></td>
 			</tr>
 			<tr>
 				<td><label for="productionYearField">Production Year:</label></td>
-				<td><select name="productionYear" id="productionYearField"></select></td>
+				<td><select th:field="*{productionYear}" id="productionYearField" required="required"></select></td>
 			</tr>
 			<tr>
 				<td><label for="engineTypeField">Engine Type:</label></td>
-				<td><select name="engineType" id="engineTypeField"></select></td>
+				<td><select th:field="*{engineType}" id="engineTypeField" required="required"></select></td>
 			</tr>
 			<tr>
 				<td><label for="engineCapacityField">Engine Capacity:</label></td>
-				<td><input type="text" name="engineCapacity" id="engineCapacityField"><div id="engineCapacityError">Please, fill the field!</div></td>
+				<td><input type="text" th:field="*{engineCapacity}" id="engineCapacityField" required="required"></td>
 			</tr>
 		</table>
-		<input type="button" value="Add Car" onclick="addCar()" id="addCarButton">
+        <button type="submit" class="btn btn-success">Add Car</button>
 	</form>
-	<script type="text/javascript">
-		var markField = document.getElementById("markField");
-		var markError = document.getElementById("markError");
-		markError.style.display = "none";
-		markField.oninput = function() {
-			if (this.value != null && this.value !== "") {
-				markError.style.display = "none";
-			}
-		};
-		var modelField = document.getElementById("modelField");
-		var modelError = document.getElementById("modelError");
-		modelError.style.display = "none";
-		modelField.oninput = function() {
-			if (this.value != null && this.value !== "") {
-				modelError.style.display = "none";
-			}
-		};
-		var engineCapacityField = document.getElementById("engineCapacityField");
-		var engineCapacityError = document.getElementById("engineCapacityError");
-		engineCapacityError.style.display = "none";
-		engineCapacityField.oninput = function() {
-			if (this.value != null && this.value !== "") {
-				engineCapacityError.style.display = "none";
-			}
-		};
-
+	<script type="text/javascript" th:inline="javascript">
 		var productionYearField = document.getElementById("productionYearField");
-		var currentYear = new Date().getFullYear();
-		for (var year = currentYear; year > 1980; year--){
-		    productionYearField.options.add(new Option(year, year));
+		var years = [[${years}]];
+		for (var yearIndex in years) {
+			productionYearField.options.add(new Option(years[yearIndex], years[yearIndex]));
 		}
 
-		var engineTypeField = document.getElementById("engineTypeField");
+        var engineCapacityField = document.getElementById("engineCapacityField");
+        engineCapacityField.value = "";
+
+        var engineTypeField = document.getElementById("engineTypeField");
 		engineTypeField.addEventListener("change", function() {
 			if (engineTypeField.value === "ELECTRIC") {
 				engineCapacityField.value = "";
 				engineCapacityField.disabled = true;
-				engineCapacityError.style.display = "none";
 			} else {
 				engineCapacityField.disabled = false;
 			}
-		});	
-		engineTypeField.options.add(new Option("Gasoline", "GASOLINE"));
-		engineTypeField.options.add(new Option("Diesel", "DIESEL"));
-		engineTypeField.options.add(new Option("Hybrid", "HYBRID"));
-		engineTypeField.options.add(new Option("Electric", "ELECTRIC"));
+		});
 
-		function addCar() {
-			var validForm = true;
-			if (markField.value == null || markField.value === "") {
-				markError.style.display = "inline";
-				validForm = false;
-			} else {
-				markError.style.display = "none";
-			}
-			if (modelField.value == null || modelField.value === "") {
-				modelError.style.display = "inline";
-				validForm = false;
-			} else {
-				modelError.style.display = "none";
-			}
-			if ((engineCapacityField.value == null || engineCapacityField.value === "") && engineTypeField.value !== "ELECTRIC") {
-				engineCapacityError.style.display = "inline";
-				validForm = false;
-			} else {
-				engineCapacityError.style.display = "none";
-			}
-			if (validForm) {
-				var newCarForm = document.getElementById("newCarForm");
-				newCarForm.submit();
-				var newCar = {};
-				for (var i = 0; i < newCarForm.length; i++) {
-					var formElement = newCarForm[i];
-					if (formElement.hasAttribute("name")) {
-						newCar[formElement.name] = formElement.value;
-					}
-				}
-				var xhr = new XMLHttpRequest();
-				var method = "POST";
-				var url = "http://localhost:8080/car/create";
-				xhr.open(method, url, true);
-				xhr.setRequestHeader("Content-type", "application/json");
-				xhr.send(JSON.stringify(newCar));
-			} else {
-				alert("Form is not valid");
-			}
-		}
+        var engineTypes = [[${engineTypesMap}]];
+		Object.keys(engineTypes).forEach(function(key) {
+			var value = engineTypes[key];
+			engineTypeField.options.add(new Option(key, value));
+		});
 	</script>
 </body>
 </html>

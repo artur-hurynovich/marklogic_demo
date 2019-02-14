@@ -3,10 +3,29 @@
 <head>
     <title>Cars</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" th:href="@{css/cars-style.css}" href="../static/css/cars-style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/assets/css/cars-style.css}" href="../static/assets/css/cars-style.css">
 </head>
 <body>
     <div th:insert="~{menu :: menuBar}"></div>
-    <h1>CARS</h1>
+    <table>
+        <tr>
+            <th>Mark</th>
+            <th>Model</th>
+            <th>Production Year</th>
+            <th>Engine Type</th>
+            <th>Engine Capacity</th>
+        </tr>
+        <tr th:each="car : ${cars}">
+            <td><label th:text="${car.mark}"></label></td>
+            <td><label th:text="${car.model}"></label></td>
+            <td><label th:text="${car.productionYear}"></label></td>
+            <td><label th:text="${car.engineType}"></label></td>
+            <td><label th:text="${car.engineCapacity}"></label></td>
+            <td><button class="btn btn-warning">Edit</button><button class="btn btn-danger">Delete</button></td>
+        </tr>
+    </table>
 </body>
 </html>
