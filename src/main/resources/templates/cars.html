@@ -23,8 +23,19 @@
             <td><label th:text="${car.model}"></label></td>
             <td><label th:text="${car.productionYear}"></label></td>
             <td><label th:text="${car.engineType}"></label></td>
-            <td><label th:text="${car.engineCapacity}"></label></td>
-            <td><button class="btn btn-warning">Edit</button><button class="btn btn-danger">Delete</button></td>
+            <td><label th:unless="${car.engineCapacity == 0.0}" th:text="${car.engineCapacity}"></label></td>
+            <td>
+                <div>
+                    <button class="btn btn-warning" form="editForm">Edit</button>
+                    <button class="btn btn-danger" form="deleteForm">Delete</button>
+                    <form id="editForm" action="#" th:action="@{~/editCarPage}" method="post">
+                        <input type="hidden" th:name="id" th:value="${car.id}">
+                    </form>
+                    <form id="deleteForm" action="#" th:action="@{~/delete}" method="post">
+                        <input type="hidden" th:name="id" th:value="${car.id}">
+                    </form>
+                </div>
+            </td>
         </tr>
     </table>
 </body>

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -29,14 +31,18 @@ public class PageController {
 
     @GetMapping("/newCarPage")
     public String newCarPage(final Model model) {
-        model.addAttribute("newCarDto", new CarDTO());
+        model.addAttribute("newCar", new CarDTO());
         model.addAttribute("engineTypesMap", EngineType.toEngineTypesMap());
         model.addAttribute("years", years);
         return "new-car";
     }
 
-    @GetMapping("/editCarPage")
-    public String editCarPage() {
+    @PostMapping("/editCarPage")
+    public String editCarPage(final @RequestParam String id, final Model model) {
+        final CarDTO carToEdit = carService.read(id);
+        model.addAttribute("carToEdit", carToEdit);
+        model.addAttribute("engineTypesMap", EngineType.toEngineTypesMap());
+        model.addAttribute("years", years);
         return "edit-car";
     }
 }
