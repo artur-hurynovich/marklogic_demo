@@ -28,7 +28,7 @@ public class MarkLogicDemoApplicationConfiguration {
 
     @Bean
     public DatabaseClient databaseClient() {
-        return DatabaseClientFactory.newClient(host, port, digestAuthContext(), DatabaseClient.ConnectionType.GATEWAY);
+        return DatabaseClientFactory.newClient(host, port, database, digestAuthContext(), DatabaseClient.ConnectionType.GATEWAY);
     }
 
     private DatabaseClientFactory.DigestAuthContext digestAuthContext() {
