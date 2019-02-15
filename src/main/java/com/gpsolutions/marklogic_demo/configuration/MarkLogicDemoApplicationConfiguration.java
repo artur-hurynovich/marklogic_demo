@@ -57,14 +57,14 @@ public class MarkLogicDemoApplicationConfiguration {
         return years;
     }
 
-    /*@Bean
-    public Set<EntityClassField> entityClassFieldSet() {
-        final Set<EntityClassField> entityClassFieldSet = new LinkedHashSet<>();
-        entityClassFieldSet.add(new EntityClassField("mark", "Mark", String.class));
-        entityClassFieldSet.add(new EntityClassField("model", "Model", String.class));
-        entityClassFieldSet.add(new EntityClassField("productionYear", "Production year", Integer.class));
-        entityClassFieldSet.add(new EntityClassField("engineType", "Engine type", Enum.class));
-        entityClassFieldSet.add(new EntityClassField())
-        return entityClassFieldSet;
-    }*/
+    @Bean
+    public Set<EntityClassField> entityClassFields() {
+        final Set<EntityClassField> entityClassFields = new LinkedHashSet<>();
+        entityClassFields.add(new EntityClassField("mark", "Mark", String.class));
+        entityClassFields.add(new EntityClassField("model", "Model", String.class));
+        entityClassFields.add(new EntityClassField("productionYear", "Production year", Integer.class));
+        entityClassFields.add(new EntityClassField("engineType", "Engine type", Enum.class));
+        entityClassFields.add(new EntityClassField("engineCapacity", "Engine capacity", Double.class));
+        return entityClassFields;
+    }
 }

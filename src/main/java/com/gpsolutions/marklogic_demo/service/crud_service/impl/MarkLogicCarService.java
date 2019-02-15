@@ -68,6 +68,13 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
         return processSearch(searchCriteria);
     }
 
+    @Override
+    public List<CarDTO> search(final Double searchPattern, final MatchType matchType, final String fieldName) {
+        final SearchCriteria searchCriteria =
+                searchCriteriaFactory.buildCriteria(searchPattern, matchType, fieldName);
+        return processSearch(searchCriteria);
+    }
+
     private List<CarDTO> processSearch(final SearchCriteria searchCriteria) {
         final SingleCriteriaSearchProcessor<CarEntity, String> searchProcessor =
                 searchProcessorFactory.buildCarEntitySearchProcessor(carRepository);

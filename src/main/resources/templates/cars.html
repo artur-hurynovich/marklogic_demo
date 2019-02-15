@@ -15,16 +15,18 @@
             <form th:action="@{~/search}" th:id="searchForm" th:method="post">
                 <table>
                     <tr>
-                        <td><label th:for="searchPatternField">Search pattern:</label></td>
-                        <td><input th:type="text" th:id="searchPatternField" th:name="searchPattern" th:required="required"></td>
+                        <td><label th:for="fieldNameField">Field name:</label></td>
+                        <td>
+                            <select th:id="fieldNameField" th:name="fieldName" th:required="required"></select>
+                        </td>
                     </tr>
                     <tr>
                         <td><label th:for="matchTypeField">Match type:</label></td>
                         <td><select th:name="matchType" th:id="matchTypeField" th:required="required"></select></td>
                     </tr>
                     <tr>
-                        <td><label th:for="fieldNameField">Field name:</label></td>
-                        <td><input th:type="text" th:id="fieldNameField" th:name="fieldName" th:required="required"></td>
+                        <td><label th:for="searchPatternField">Search pattern:</label></td>
+                        <td><input th:type="text" th:id="searchPatternField" th:name="searchPattern" th:required="required"></td>
                     </tr>
                 </table>
             </form>
@@ -66,6 +68,13 @@
         </div>
     </div>
     <script type="text/javascript" th:inline="javascript">
+        var fieldNameField = document.getElementById("fieldNameField");
+        var entityClassFields = [[${entityClassFields}]];
+        for (var entityClassFieldIndex in entityClassFields) {
+            var entityClassField = entityClassFields[entityClassFieldIndex];
+            fieldNameField.options.add(new Option(entityClassField["presentation"], entityClassField["name"]));
+        }
+
         var matchTypeField = document.getElementById("matchTypeField");
         var matchTypes = [[${matchTypes}]];
         Object.keys(matchTypes).forEach(function(key) {

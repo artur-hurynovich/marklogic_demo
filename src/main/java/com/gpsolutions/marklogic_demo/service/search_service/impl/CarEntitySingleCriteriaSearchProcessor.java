@@ -27,8 +27,10 @@ public class CarEntitySingleCriteriaSearchProcessor extends AbstractSingleCriter
         final PojoQueryBuilder<CarEntity> queryBuilder = getPojoRepository().getQueryBuilder();
         if (getSearchCriteria().getSearchPattern() instanceof String) {
             return getSearchResultByStringPattern(queryBuilder);
+        } else if (getSearchCriteria().getSearchPattern() instanceof Integer){
+            return getSearchResultByIntegerPattern(queryBuilder);
         } else {
-            return getSearchResultByNumberPattern(queryBuilder);
+            return getSearchResultByDoublePattern(queryBuilder);
         }
     }
 
@@ -42,16 +44,29 @@ public class CarEntitySingleCriteriaSearchProcessor extends AbstractSingleCriter
         }
     }
 
-    private List<CarEntity> getSearchResultByNumberPattern(final PojoQueryBuilder<CarEntity> queryBuilder) {
+    private List<CarEntity> getSearchResultByIntegerPattern(final PojoQueryBuilder<CarEntity> queryBuilder) {
         if (getSearchCriteria().getMatchType().equals(MatchType.FULL_MATCH)) {
             return convertQueryDefinitionToList(queryBuilder.value(getSearchCriteria().getFieldName(),
-                    Double.valueOf(getSearchCriteria().getSearchPattern().toString())));
+                    Integer.valueOf(getSearchCriteria().getSearchPattern().toString())));
         } else if (getSearchCriteria().getMatchType().equals(MatchType.GREATER_THAN)){
             return convertQueryDefinitionToList(queryBuilder.range(getSearchCriteria().getFieldName(),
                     PojoQueryBuilder.Operator.GT, Integer.valueOf(getSearchCriteria().getSearchPattern().toString())));
         } else {
             return convertQueryDefinitionToList(queryBuilder.range(getSearchCriteria().getFieldName(),
                     PojoQueryBuilder.Operator.LT, Integer.valueOf(getSearchCriteria().getSearchPattern().toString())));
+        }
+    }
+
+    private List<CarEntity> getSearchResultByDoublePattern(final PojoQueryBuilder<CarEntity> queryBuilder) {
+        if (getSearchCriteria().getMatchType().equals(MatchType.FULL_MATCH)) {
+            return convertQueryDefinitionToList(queryBuilder.value(getSearchCriteria().getFieldName(),
+                    Double.valueOf(getSearchCriteria().getSearchPattern().toString())));
+        } else if (getSearchCriteria().getMatchType().equals(MatchType.GREATER_THAN)){
+            return convertQueryDefinitionToList(queryBuilder.range(getSearchCriteria().getFieldName(),
+                    PojoQueryBuilder.Operator.GT, Double.valueOf(getSearchCriteria().getSearchPattern().toString())));
+        } else {
+            return convertQueryDefinitionToList(queryBuilder.range(getSearchCriteria().getFieldName(),
+                    PojoQueryBuilder.Operator.LT, Double.valueOf(getSearchCriteria().getSearchPattern().toString())));
         }
     }
 
