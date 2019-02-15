@@ -6,37 +6,72 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/assets/css/cars-style.css}" href="../static/assets/css/cars-style.css">
+    <link rel="stylesheet" th:href="@{/assets/css/cars-style.css}">
 </head>
 <body>
     <div th:insert="~{menu :: menuBar}"></div>
-    <table>
-        <tr>
-            <th>Mark</th>
-            <th>Model</th>
-            <th>Production Year</th>
-            <th>Engine Type</th>
-            <th>Engine Capacity</th>
-        </tr>
-        <tr th:each="car, iter : ${cars}">
-            <td><label th:text="${car.mark}"></label></td>
-            <td><label th:text="${car.model}"></label></td>
-            <td><label th:text="${car.productionYear}"></label></td>
-            <td><label th:text="${car.engineType}"></label></td>
-            <td><label th:unless="${car.engineCapacity == 0.0}" th:text="${car.engineCapacity}"></label></td>
-            <td>
-                <div>
-                    <button class="btn btn-warning" th:form="editForm + ${iter.index}">Edit</button>
-                    <button class="btn btn-danger" th:form="deleteForm + ${iter.index}">Delete</button>
-                    <form th:id="editForm + ${iter.index}" action="#" th:action="@{~/editCarPage}" method="post">
-                        <input type="hidden" th:name="id" th:value="${car.id}">
-                    </form>
-                    <form th:id="deleteForm + ${iter.index}" action="#" th:action="@{~/delete}" method="post">
-                        <input type="hidden" th:name="id" th:value="${car.id}">
-                    </form>
-                </div>
-            </td>
-        </tr>
-    </table>
+    <div th:id="containerDiv">
+        <div th:id="searchDiv" style="float: left; width: 20%">
+            <form th:action="@{~/search}" th:id="searchForm" th:method="post">
+                <table>
+                    <tr>
+                        <td><label th:for="searchPatternField">Search pattern:</label></td>
+                        <td><input th:type="text" th:id="searchPatternField" th:name="searchPattern" th:required="required"></td>
+                    </tr>
+                    <tr>
+                        <td><label th:for="matchTypeField">Match type:</label></td>
+                        <td><select th:name="matchType" th:id="matchTypeField" th:required="required"></select></td>
+                    </tr>
+                    <tr>
+                        <td><label th:for="fieldNameField">Field name:</label></td>
+                        <td><input th:type="text" th:id="fieldNameField" th:name="fieldName" th:required="required"></td>
+                    </tr>
+                </table>
+            </form>
+            <form th:action="@{~/carsPage}" th:id="allCarsForm" th:method="get"></form>
+            <div th:id="searchButtonsDiv" style="margin-top: 5px">
+                <button th:type="submit" th:form="searchForm" class="btn btn-success">Search</button>
+                <button th:type="submit" th:form="allCarsForm" class="btn btn-success">All Cars</button>
+            </div>
+        </div>
+        <div th:id="resultDiv" style="float: left; margin-left: 15px">
+            <table>
+                <tr>
+                    <th>Mark</th>
+                    <th>Model</th>
+                    <th>Production year</th>
+                    <th>Engine type</th>
+                    <th>Engine capacity</th>
+                </tr>
+                <tr th:each="car, iter : ${cars}">
+                    <td><label th:text="${car.mark}"></label></td>
+                    <td><label th:text="${car.model}"></label></td>
+                    <td><label th:text="${car.productionYear}"></label></td>
+                    <td><label th:text="${car.engineType}"></label></td>
+                    <td><label th:unless="${car.engineCapacity == 0.0}" th:text="${car.engineCapacity}"></label></td>
+                    <td>
+                        <div>
+                            <button class="btn btn-warning" th:form="editForm + ${iter.index}">Edit</button>
+                            <button class="btn btn-danger" th:form="deleteForm + ${iter.index}">Delete</button>
+                            <form th:id="editForm + ${iter.index}" th:action="@{~/editCarPage}" th:method="post">
+                                <input th:type="hidden" th:name="id" th:value="${car.id}">
+                            </form>
+                            <form th:id="deleteForm + ${iter.index}" th:action="@{~/delete}" th:method="post">
+                                <input th:type="hidden" th:name="id" th:value="${car.id}">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        var matchTypeField = document.getElementById("matchTypeField");
+        var matchTypes = [[${matchTypes}]];
+        Object.keys(matchTypes).forEach(function(key) {
+            var value = matchTypes[key];
+            matchTypeField.options.add(new Option(key, value));
+        });
+    </script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <ul th:fragment="menuBar" class="nav">
-    <li><a href="/carsPage" class="navbar-brand">Cars</a></li>
-    <li><a href="/newCarPage" class="navbar-brand">New Car</a></li>
-    <li><a href="/searchCarPage" class="navbar-brand">Search</a></li>
+    <li><a href="/carsPage" th:class="navbar-brand">Cars</a></li>
+    <li><a href="/newCarPage" th:class="navbar-brand">New Car</a></li>
 </ul>

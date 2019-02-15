@@ -6,38 +6,38 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/assets/css/cars-style.css}" href="../static/assets/css/cars-style.css">
+    <link rel="stylesheet" th:href="@{/assets/css/cars-style.css}">
 </head>
 <body>
     <div th:insert="~{menu :: menuBar}"></div>
-    <form id="editForm" action="#" th:action="@{~/update}" th:object="${carToEdit}" method="post">
-        <input type="hidden" th:field="*{id}">
+    <form th:id="editForm" th:action="@{~/update}" th:object="${carToEdit}" th:method="post">
+        <input th:type="hidden" th:field="*{id}">
         <table>
             <tr>
-                <td><label for="markField">Mark:</label></td>
-                <td><input type="text" th:field="*{mark}" id="markField" required="required"></td>
+                <td><label th:for="markField">Mark:</label></td>
+                <td><input th:type="text" th:field="*{mark}" th:id="markField" th:required="required"></td>
             </tr>
             <tr>
-                <td><label for="modelField">Model:</label></td>
-                <td><input type="text" th:field="*{model}" id="modelField" required="required"></td>
+                <td><label th:for="modelField">Model:</label></td>
+                <td><input th:type="text" th:field="*{model}" th:id="modelField" th:required="required"></td>
             </tr>
             <tr>
-                <td><label for="productionYearField">Production Year:</label></td>
-                <td><select th:field="*{productionYear}" id="productionYearField" required="required"></select></td>
+                <td><label th:for="productionYearField">Production Year:</label></td>
+                <td><select th:field="*{productionYear}" th:id="productionYearField" th:required="required"></select></td>
             </tr>
             <tr>
-                <td><label for="engineTypeField">Engine Type:</label></td>
-                <td><select th:field="*{engineType}" id="engineTypeField" required="required"></select></td>
+                <td><label th:for="engineTypeField">Engine Type:</label></td>
+                <td><select th:field="*{engineType}" th:id="engineTypeField" th:required="required"></select></td>
             </tr>
             <tr>
-                <td><label for="engineCapacityField">Engine Capacity:</label></td>
-                <td><input type="text" th:field="*{engineCapacity}" id="engineCapacityField" required="required"></td>
+                <td><label th:for="engineCapacityField">Engine Capacity:</label></td>
+                <td><input th:type="text" th:field="*{engineCapacity}" th:id="engineCapacityField" th:required="required"></td>
             </tr>
         </table>
     </form>
-    <button type="submit" class="btn btn-success" form="editForm">Edit Car</button>
-    <button type="submit" class="btn btn-danger" form="cancelForm">Cancel</button>
-    <form id="cancelForm" action="#" th:action="@{~/carsPage}"></form>
+    <button th:type="submit" class="btn btn-success" th:form="editForm">Edit Car</button>
+    <button th:type="submit" class="btn btn-danger" th:form="cancelForm">Cancel</button>
+    <form th:id="cancelForm" th:action="@{~/carsPage}"></form>
     <script type="text/javascript" th:inline="javascript">
         var productionYearField = document.getElementById("productionYearField");
         var years = [[${years}]];

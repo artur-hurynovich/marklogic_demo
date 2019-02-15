@@ -1,7 +1,7 @@
 package com.gpsolutions.marklogic_demo.controller.rest;
 
 import com.gpsolutions.marklogic_demo.dto.impl.CarDTO;
-import com.gpsolutions.marklogic_demo.service.GenericService;
+import com.gpsolutions.marklogic_demo.service.crud_service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

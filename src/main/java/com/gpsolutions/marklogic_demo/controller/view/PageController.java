@@ -2,7 +2,8 @@ package com.gpsolutions.marklogic_demo.controller.view;
 
 import com.gpsolutions.marklogic_demo.dto.impl.CarDTO;
 import com.gpsolutions.marklogic_demo.enumeration.EngineType;
-import com.gpsolutions.marklogic_demo.service.GenericService;
+import com.gpsolutions.marklogic_demo.service.crud_service.GenericService;
+import com.gpsolutions.marklogic_demo.service.search_service.enumeration.MatchType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,18 +24,19 @@ public class PageController {
         this.years = years;
     }
 
-    @GetMapping({"/", "/carsPage"})
-    public String carsPage(final Model model) {
-        model.addAttribute("cars", carService.readAll());
-        return "cars";
-    }
-
     @GetMapping("/newCarPage")
     public String newCarPage(final Model model) {
         model.addAttribute("newCar", new CarDTO());
         model.addAttribute("engineTypesMap", EngineType.toEngineTypesMap());
         model.addAttribute("years", years);
         return "new-car";
+    }
+
+    @GetMapping({"/", "/carsPage"})
+    public String carsPage(final Model model) {
+        model.addAttribute("cars", carService.readAll());
+        model.addAttribute("matchTypes", MatchType.toMatchTypesMap());
+        return "cars";
     }
 
     @PostMapping("/editCarPage")
