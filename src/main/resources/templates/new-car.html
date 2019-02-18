@@ -10,7 +10,7 @@
 </head>
 <body>
 	<div th:insert="~{menu :: menuBar}"></div>
-	<form th:action="@{~/create}" th:object="${newCar}" th:method="post">
+	<form th:id="newForm" th:action="@{~/create}" th:object="${newCar}" th:method="post">
 		<table>
 			<tr>
 				<td><label th:for="markField">Mark:</label></td>
@@ -33,8 +33,10 @@
 				<td><input th:type="text" th:field="*{engineCapacity}" th:id="engineCapacityField" th:required="required"></td>
 			</tr>
 		</table>
-        <button th:type="submit" class="btn btn-success">Add Car</button>
 	</form>
+	<div class="margin-top-5-px">
+		<button th:type="submit" class="btn btn-success" th:form="newForm">Add Car</button>
+	</div>
 	<script type="text/javascript" th:inline="javascript">
 		var productionYearField = document.getElementById("productionYearField");
 		var years = [[${years}]];

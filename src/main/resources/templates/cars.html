@@ -10,8 +10,8 @@
 </head>
 <body>
     <div th:insert="~{menu :: menuBar}"></div>
-    <div th:id="containerDiv">
-        <div th:id="searchDiv" style="float: left; width: 20%">
+    <div class="div-container">
+        <div class="div-left">
             <form th:action="@{~/search}" th:id="searchForm" th:method="post">
                 <table>
                     <tr>
@@ -31,13 +31,13 @@
                 </table>
             </form>
             <form th:action="@{~/carsPage}" th:id="allCarsForm" th:method="get"></form>
-            <div th:id="searchButtonsDiv" style="margin-top: 5px">
+            <div th:id="searchButtonsDiv" class="margin-top-5-px">
                 <button th:type="submit" th:form="searchForm" class="btn btn-success">Search</button>
                 <button th:type="submit" th:form="allCarsForm" class="btn btn-success">All Cars</button>
             </div>
         </div>
-        <div th:id="resultDiv" style="float: left; margin-left: 15px">
-            <table>
+        <div class="div-right">
+            <table class="result-table">
                 <tr>
                     <th>Mark</th>
                     <th>Model</th>
@@ -69,11 +69,11 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
         var fieldNameField = document.getElementById("fieldNameField");
-        var entityClassFields = [[${entityClassFields}]];
-        for (var entityClassFieldIndex in entityClassFields) {
-            var entityClassField = entityClassFields[entityClassFieldIndex];
-            fieldNameField.options.add(new Option(entityClassField["presentation"], entityClassField["name"]));
-        }
+        var classFields = [[${classFields}]];
+        Object.keys(classFields).forEach(function(key) {
+            var value = classFields[key];
+            fieldNameField.options.add(new Option(key, value));
+        });
 
         var matchTypeField = document.getElementById("matchTypeField");
         var matchTypes = [[${matchTypes}]];

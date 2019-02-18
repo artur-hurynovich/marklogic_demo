@@ -35,8 +35,10 @@
             </tr>
         </table>
     </form>
-    <button th:type="submit" class="btn btn-success" th:form="editForm">Edit Car</button>
-    <button th:type="submit" class="btn btn-danger" th:form="cancelForm">Cancel</button>
+    <div class="margin-top-5-px">
+        <button th:type="submit" class="btn btn-success" th:form="editForm">Edit Car</button>
+        <button th:type="submit" class="btn btn-danger" th:form="cancelForm">Cancel</button>
+    </div>
     <form th:id="cancelForm" th:action="@{~/carsPage}"></form>
     <script type="text/javascript" th:inline="javascript">
         var productionYearField = document.getElementById("productionYearField");

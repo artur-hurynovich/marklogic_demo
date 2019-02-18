@@ -6,7 +6,29 @@ table {
     border-collapse: collapse;
 }
 
+.div-container {
+    width: 100%;
+}
+
+.div-left {
+    width: 25%;
+    float: left;
+}
+
+.div-right {
+    width: auto;
+}
+
+.result-table {
+    min-width: 50%;
+    width: 50%;
+}
+
 th, td {
     border: 1px solid black;
     padding: 10px;
+}
+
+.margin-top-5-px {
+    margin-top: 5px;
 }
