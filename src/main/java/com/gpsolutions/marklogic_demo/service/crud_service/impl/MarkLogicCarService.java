@@ -70,7 +70,7 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
                     searchCriteriaFactory.buildCriteria(matchType, fieldName, Double.valueOf(searchPattern))).stream().
                     map(carConverter::convertToDTO).collect(Collectors.toList());
         } else {
-            throw new SearchCriteriaException("Failed to qualify search pattern class!");
+            throw new SearchCriteriaException("Failed to qualify class for search pattern '" + searchPattern + "'!");
         }
     }
 
