@@ -6,8 +6,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SearchCriteria {
-    private Object searchPattern;
+public abstract class GenericSearchCriteria<T> {
     private MatchType matchType;
     private String fieldName;
+    private T searchPattern;
+
+    public abstract Class<T> getType();
 }

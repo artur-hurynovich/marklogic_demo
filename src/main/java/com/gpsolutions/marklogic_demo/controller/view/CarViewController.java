@@ -43,16 +43,8 @@ public class CarViewController {
         final Class<?> searchPatternClass = entityClassFields.stream().filter(entityClassField ->
                 entityClassField.getName().equals(fieldName)).map(EntityClassField::getType).
                 collect(Collectors.toList()).iterator().next();
-        if (searchPatternClass.isAssignableFrom(Integer.class)) {
-            model.addAttribute("cars",
-                    carService.search(Integer.valueOf(searchPattern), matchType, fieldName));
-        } else if (searchPatternClass.isAssignableFrom(Double.class)){
-            model.addAttribute("cars",
-                    carService.search(Double.valueOf(searchPattern), matchType, fieldName));
-        } else {
-            model.addAttribute("cars",
-                    carService.search(searchPattern, matchType, fieldName));
-        }
+        model.addAttribute("cars",
+                carService.search(searchPattern, searchPatternClass,  matchType, fieldName));
         model.addAttribute("matchTypes", MatchType.toMatchTypesMap());
         return "cars";
     }

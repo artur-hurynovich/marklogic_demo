@@ -12,11 +12,8 @@ public interface GenericService<E extends AbstractDTO> {
 
     List<E> readAll();
 
-    List<E> search(final String searchPattern, final MatchType matchType, final String fieldName);
-
-    List<E> search(final Integer searchPattern, final MatchType matchType, final String fieldName);
-
-    List<E> search(final Double searchPattern, final MatchType matchType, final String fieldName);
+    List<E> search(final String searchPattern, final Class<?> searchPatternClass,
+                   final MatchType matchType, final String fieldName);
 
     void update(final E e);
 

@@ -1,4 +1,4 @@
-package com.gpsolutions.marklogic_demo.service.search_service.exception;
+package com.gpsolutions.marklogic_demo.exception;
 
 public class SearchCriteriaException extends RuntimeException {
     public SearchCriteriaException() {

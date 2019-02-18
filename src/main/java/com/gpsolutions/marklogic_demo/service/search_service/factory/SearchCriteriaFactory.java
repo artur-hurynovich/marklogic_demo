@@ -1,35 +1,55 @@
 package com.gpsolutions.marklogic_demo.service.search_service.factory;
 
-import com.gpsolutions.marklogic_demo.service.search_service.SearchCriteria;
+import com.gpsolutions.marklogic_demo.exception.SearchCriteriaException;
 import com.gpsolutions.marklogic_demo.service.search_service.enumeration.MatchType;
-import com.gpsolutions.marklogic_demo.service.search_service.exception.SearchCriteriaException;
+import com.gpsolutions.marklogic_demo.service.search_service.impl.DoubleSearchCriteria;
+import com.gpsolutions.marklogic_demo.service.search_service.impl.IntegerSearchCriteria;
+import com.gpsolutions.marklogic_demo.service.search_service.impl.StringSearchCriteria;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SearchCriteriaFactory {
-    public SearchCriteria buildCriteria(final String searchPattern,
-                                        final MatchType matchType,
-                                        final String fieldName) {
-        if (invalidMatchTypeForStringCriteria(matchType)) {
-            throw new SearchCriteriaException("Match type " + matchType.name() +
-                    " is not applicable for search pattern of type " + searchPattern.getClass().getName() + "!");
-        } else if (fieldName == null) {
-            throw new SearchCriteriaException("Field name can't be null!");
+    private static final String FIELD_NAME_EXCEPTION_MESSAGE = "Field name can't be null!";
+    private static final String MATCH_TYPE_EXCEPTION_MESSAGE = "Match type %s is not applicable " +
+            "for search pattern of type %s!";
+
+    public StringSearchCriteria buildCriteria(final MatchType matchType,
+                                                       final String fieldName,
+                                                       final String searchPattern) {
+        if (fieldName == null) {
+            throw new SearchCriteriaException(FIELD_NAME_EXCEPTION_MESSAGE);
+        } else if (invalidMatchTypeForStringCriteria(matchType)) {
+            throw new SearchCriteriaException(
+                    String.format(MATCH_TYPE_EXCEPTION_MESSAGE, matchType.name(), searchPattern.getClass().getName()));
         } else {
-            return new SearchCriteria(searchPattern, matchType, fieldName);
+            return new StringSearchCriteria(matchType, fieldName, searchPattern);
         }
     }
 
-    public SearchCriteria buildCriteria(final Integer searchPattern,
-                                        final MatchType matchType,
-                                        final String fieldName) {
-        return buildCriteriaForNumberSearchPattern(searchPattern, matchType, fieldName);
+    public IntegerSearchCriteria buildCriteria(final MatchType matchType,
+                                                        final String fieldName,
+                                                        final Integer searchPattern) {
+        if (fieldName == null) {
+            throw new SearchCriteriaException(FIELD_NAME_EXCEPTION_MESSAGE);
+        } else if (invalidMatchTypeForNumberCriteria(matchType)) {
+            throw new SearchCriteriaException(
+                    String.format(MATCH_TYPE_EXCEPTION_MESSAGE, matchType.name(), searchPattern.getClass().getName()));
+        } else {
+            return new IntegerSearchCriteria(matchType, fieldName, searchPattern);
+        }
     }
 
-    public SearchCriteria buildCriteria(final Double searchPattern,
-                                        final MatchType matchType,
-                                        final String fieldName) {
-        return buildCriteriaForNumberSearchPattern(searchPattern, matchType, fieldName);
+    public DoubleSearchCriteria buildCriteria(final MatchType matchType,
+                                                       final String fieldName,
+                                                       final Double searchPattern) {
+        if (fieldName == null) {
+            throw new SearchCriteriaException(FIELD_NAME_EXCEPTION_MESSAGE);
+        } else if (invalidMatchTypeForNumberCriteria(matchType)) {
+            throw new SearchCriteriaException(
+                    String.format(MATCH_TYPE_EXCEPTION_MESSAGE, matchType.name(), searchPattern.getClass().getName()));
+        } else {
+            return new DoubleSearchCriteria(matchType, fieldName, searchPattern);
+        }
     }
 
     private boolean invalidMatchTypeForStringCriteria(final MatchType matchType) {
@@ -38,18 +58,5 @@ public class SearchCriteriaFactory {
 
     private boolean invalidMatchTypeForNumberCriteria(final MatchType matchType) {
         return matchType.equals(MatchType.PARTIAL_MATCH);
-    }
-
-    private SearchCriteria buildCriteriaForNumberSearchPattern(final Number searchPattern,
-                                                               final MatchType matchType,
-                                                               final String fieldName) {
-        if (invalidMatchTypeForNumberCriteria(matchType)) {
-            throw new SearchCriteriaException("Match type " + matchType.name() +
-                    " is not applicable for search pattern of type " + searchPattern.getClass().getName() + "!");
-        } else if (fieldName == null) {
-            throw new SearchCriteriaException("Field name can't be null!");
-        } else {
-            return new SearchCriteria(searchPattern, matchType, fieldName);
-        }
     }
 }

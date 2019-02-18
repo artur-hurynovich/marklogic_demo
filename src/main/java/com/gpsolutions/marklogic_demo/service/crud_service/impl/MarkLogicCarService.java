@@ -3,8 +3,8 @@ package com.gpsolutions.marklogic_demo.service.crud_service.impl;
 import com.gpsolutions.marklogic_demo.converter.EntityDTOConverter;
 import com.gpsolutions.marklogic_demo.dto.impl.CarDTO;
 import com.gpsolutions.marklogic_demo.entity.impl.CarEntity;
+import com.gpsolutions.marklogic_demo.exception.SearchCriteriaException;
 import com.gpsolutions.marklogic_demo.service.crud_service.GenericService;
-import com.gpsolutions.marklogic_demo.service.search_service.SearchCriteria;
 import com.gpsolutions.marklogic_demo.service.search_service.SingleCriteriaSearchProcessor;
 import com.gpsolutions.marklogic_demo.service.search_service.enumeration.MatchType;
 import com.gpsolutions.marklogic_demo.service.search_service.factory.SearchCriteriaFactory;
@@ -24,7 +24,7 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
     private final PojoRepository<CarEntity, String> carRepository;
     private final EntityDTOConverter<CarEntity, CarDTO> carConverter;
     private final SearchCriteriaFactory searchCriteriaFactory;
-    private final SingleCriteriaSearchProcessorFactory searchProcessorFactory;
+    private final SingleCriteriaSearchProcessor<CarEntity> searchProcessor;
 
     @Autowired
     public MarkLogicCarService(final PojoRepository<CarEntity, String> carRepository,
@@ -34,7 +34,7 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
         this.carRepository = carRepository;
         this.carConverter = carConverter;
         this.searchCriteriaFactory = searchCriteriaFactory;
-        this.searchProcessorFactory = searchProcessorFactory;
+        this.searchProcessor = searchProcessorFactory.buildCarEntitySearchProcessor(carRepository);
     }
 
     @Override
@@ -55,32 +55,23 @@ public class MarkLogicCarService implements GenericService<CarDTO> {
     }
 
     @Override
-    public List<CarDTO> search(final String searchPattern, final MatchType matchType, final String fieldName) {
-        final SearchCriteria searchCriteria =
-                searchCriteriaFactory.buildCriteria(searchPattern, matchType, fieldName);
-        return processSearch(searchCriteria);
-    }
-
-    @Override
-    public List<CarDTO> search(final Integer searchPattern, final MatchType matchType, final String fieldName) {
-        final SearchCriteria searchCriteria =
-                searchCriteriaFactory.buildCriteria(searchPattern, matchType, fieldName);
-        return processSearch(searchCriteria);
-    }
-
-    @Override
-    public List<CarDTO> search(final Double searchPattern, final MatchType matchType, final String fieldName) {
-        final SearchCriteria searchCriteria =
-                searchCriteriaFactory.buildCriteria(searchPattern, matchType, fieldName);
-        return processSearch(searchCriteria);
-    }
-
-    private List<CarDTO> processSearch(final SearchCriteria searchCriteria) {
-        final SingleCriteriaSearchProcessor<CarEntity, String> searchProcessor =
-                searchProcessorFactory.buildCarEntitySearchProcessor(carRepository);
-        searchProcessor.setCriteria(searchCriteria);
-        return searchProcessor.getSearchResult().stream().map(carConverter::convertToDTO).
-                collect(Collectors.toList());
+    public List<CarDTO> search(final String searchPattern, final Class<?> searchPatternClass,
+                               final MatchType matchType, final String fieldName) {
+        if (searchPatternClass.isAssignableFrom(String.class)) {
+            return searchProcessor.getSearchResult(
+                    searchCriteriaFactory.buildCriteria(matchType, fieldName, searchPattern)).stream().
+                    map(carConverter::convertToDTO).collect(Collectors.toList());
+        } else if (searchPatternClass.isAssignableFrom(Integer.class)) {
+            return searchProcessor.getSearchResult(
+                    searchCriteriaFactory.buildCriteria(matchType, fieldName, Integer.valueOf(searchPattern))).stream().
+                    map(carConverter::convertToDTO).collect(Collectors.toList());
+        } else if (searchPatternClass.isAssignableFrom(Double.class)) {
+            return searchProcessor.getSearchResult(
+                    searchCriteriaFactory.buildCriteria(matchType, fieldName, Double.valueOf(searchPattern))).stream().
+                    map(carConverter::convertToDTO).collect(Collectors.toList());
+        } else {
+            throw new SearchCriteriaException("Failed to qualify search pattern class!");
+        }
     }
 
     @Override
