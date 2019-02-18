@@ -1,7 +1,7 @@
 package com.gpsolutions.marklogic_demo.configuration;
 
 import com.gpsolutions.marklogic_demo.entity.AbstractEntity;
-import com.gpsolutions.marklogic_demo.util.EntityClassField;
+import com.gpsolutions.marklogic_demo.util.ClassFieldsResolver;
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
 import com.marklogic.client.pojo.PojoRepository;
@@ -15,9 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Configuration
 public class MarkLogicDemoApplicationConfiguration {
@@ -60,14 +58,10 @@ public class MarkLogicDemoApplicationConfiguration {
         return years;
     }
 
+    @SuppressWarnings("unchecked")
     @Bean
-    public Set<EntityClassField> entityClassFields() {
-        final Set<EntityClassField> entityClassFields = new LinkedHashSet<>();
-        entityClassFields.add(new EntityClassField("mark", "Mark", String.class));
-        entityClassFields.add(new EntityClassField("model", "Model", String.class));
-        entityClassFields.add(new EntityClassField("productionYear", "Production year", Integer.class));
-        entityClassFields.add(new EntityClassField("engineType", "Engine type", Enum.class));
-        entityClassFields.add(new EntityClassField("engineCapacity", "Engine capacity", Double.class));
-        return entityClassFields;
+    public <E extends AbstractEntity> ClassFieldsResolver<E> classFieldsResolver(final DependencyDescriptor descriptor) {
+        final Class entityClass = descriptor.getResolvableType().getGeneric(0).resolve();
+        return new ClassFieldsResolver<>(entityClass);
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class SearchCriteriaFactory {
     private static final String FIELD_NAME_EXCEPTION_MESSAGE = "Field name can't be null!";
     private static final String MATCH_TYPE_EXCEPTION_MESSAGE = "Match type %s is not applicable " +
-            "for search pattern of type %s!";
+            "for search pattern of class %s!";
 
     public StringSearchCriteria buildCriteria(final MatchType matchType,
                                                        final String fieldName,

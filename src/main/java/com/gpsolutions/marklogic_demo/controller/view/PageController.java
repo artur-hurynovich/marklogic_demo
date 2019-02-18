@@ -1,10 +1,11 @@
 package com.gpsolutions.marklogic_demo.controller.view;
 
 import com.gpsolutions.marklogic_demo.dto.impl.CarDTO;
+import com.gpsolutions.marklogic_demo.entity.impl.CarEntity;
 import com.gpsolutions.marklogic_demo.enumeration.EngineType;
 import com.gpsolutions.marklogic_demo.service.crud_service.GenericService;
 import com.gpsolutions.marklogic_demo.service.search_service.enumeration.MatchType;
-import com.gpsolutions.marklogic_demo.util.EntityClassField;
+import com.gpsolutions.marklogic_demo.util.ClassFieldsResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,19 +14,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class PageController {
     private final GenericService<CarDTO> carService;
-    private final Set<EntityClassField> entityClassFields;
+    private final ClassFieldsResolver<CarEntity> classFieldsResolver;
     private final List<Integer> years;
 
     @Autowired
-    public PageController(final GenericService<CarDTO> carService, final Set<EntityClassField> entityClassFields,
+    public PageController(final GenericService<CarDTO> carService, final ClassFieldsResolver<CarEntity> classFieldsResolver,
                           final List<Integer> years) {
         this.carService = carService;
-        this.entityClassFields = entityClassFields;
+        this.classFieldsResolver = classFieldsResolver;
         this.years = years;
     }
 
@@ -39,7 +39,7 @@ public class PageController {
 
     @GetMapping({"/", "/carsPage"})
     public String carsPage(final Model model) {
-        model.addAttribute("entityClassFields", entityClassFields);
+        model.addAttribute("classFields", classFieldsResolver.getClassFields());
         model.addAttribute("cars", carService.readAll());
         model.addAttribute("matchTypes", MatchType.toMatchTypesMap());
         return "cars";
